@@ -1,7 +1,7 @@
-import type { AppProps } from "next/app";
-import { ChakraProvider } from "@chakra-ui/react";
-import { withTRPC } from "@trpc/next";
-import { AppRouter } from "@/backend/router";
+import type { AppProps } from 'next/app';
+import { ChakraProvider } from '@chakra-ui/react';
+import { withTRPC } from '@trpc/next';
+import { AppRouter } from '@/backend/router';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -19,7 +19,7 @@ export default withTRPC<AppRouter>({
      */
     const url = process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}/api/trpc`
-      : "http://localhost:3000/api/trpc";
+      : 'http://localhost:3000/api/trpc';
 
     return {
       url,
