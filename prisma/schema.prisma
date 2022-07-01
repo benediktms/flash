@@ -11,7 +11,7 @@ datasource db {
 }
 
 model FlashCard {
-  id        Int      @id
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   question  String
@@ -21,7 +21,7 @@ model FlashCard {
 }
 
 model Set {
-  id        Int         @id
+  id        Int         @id @default(autoincrement())
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   name      String
