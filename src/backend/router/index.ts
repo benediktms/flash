@@ -4,18 +4,6 @@ import { prisma } from '@/lib/db';
 
 export const appRouter = trpc
   .router()
-  .query('hello', {
-    input: z
-      .object({
-        text: z.string().nullish(),
-      })
-      .nullish(),
-    resolve({ input }) {
-      return {
-        greeting: `hello ${input?.text ?? 'world'}`,
-      };
-    },
-  })
   .mutation('create-flashcard', {
     input: z.object({
       question: z.string().min(1),
