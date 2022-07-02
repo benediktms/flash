@@ -22,15 +22,16 @@ const Home: NextPage = () => {
 
   const createFlashCardMutation = trpc.useMutation(['create-flashcard']);
   const handleCreateFlashCardMutation = (question: string, answer: string) => {
-    try {
-      createFlashCardMutation.mutate({
-        question,
-        answer,
-      });
-    } catch (e) {
+    createFlashCardMutation.mutate({
+      question,
+      answer,
+    });
+
+    if (createFlashCardMutation.error) {
+      const error = JSON.parse(createFlashCardMutation.error.message);
       toast({
-        title: 'Something went wront',
-        description: String(e),
+        title: 'Something went wrong',
+        description: error[0].message,
         status: 'error',
         isClosable: true,
       });
@@ -89,6 +90,7 @@ const Home: NextPage = () => {
             <Button
               colorScheme="yellow"
               onClick={() => handleCreateFlashCardMutation(question, answer)}
+              disabled={createFlashCardMutation.isLoading}
             >
               Submit
             </Button>
