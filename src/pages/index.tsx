@@ -1,6 +1,7 @@
 import { trpc } from '@/lib/trpc';
 import { Box, Text, Button, Center, Heading } from '@chakra-ui/react';
 import type { NextPage } from 'next';
+import Link from 'next/link';
 import { useState } from 'react';
 import { z } from 'zod';
 import { Form } from '../components/Form';
@@ -32,6 +33,10 @@ const Home: NextPage = () => {
         <Heading as="h1" my={3}>
           Achieve your goals in a flash.
         </Heading>
+
+        <Button variant="link">
+          <Link href="/sign-up">Sign up</Link>
+        </Button>
         <Box my={10} />
         <Text textAlign="center">Start learning</Text>
         <Box my={10} />

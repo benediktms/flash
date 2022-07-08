@@ -29,3 +29,12 @@ model Set {
 
   FlashCards FlashCard[]
 }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  email     String   @unique
+  password  String
+}

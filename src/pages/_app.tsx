@@ -6,6 +6,7 @@ import { loggerLink } from '@trpc/client/links/loggerLink';
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
 import { SSRContext } from '@/lib/trpc';
 import superjson from 'superjson';
+import { NodeEnvironment } from '../lib/environment';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -48,7 +49,7 @@ export default withTRPC<AppRouter>({
         // adds pretty logs to your console in development and logs errors in production
         loggerLink({
           enabled: opts =>
-            process.env.NODE_ENV === 'development' ||
+            process.env.NODE_ENV === NodeEnvironment.Development ||
             (opts.direction === 'down' && opts.result instanceof Error),
         }),
         httpBatchLink({
