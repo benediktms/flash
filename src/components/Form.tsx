@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { FormProps, Form as FinalForm } from 'react-final-form';
 import { ReactNode } from 'react';
-import { Box, Button, HStack } from '@chakra-ui/react';
+import { Button, FormErrorMessage, HStack } from '@chakra-ui/react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Props<S extends z.ZodType<any, any>> = {
@@ -49,18 +49,14 @@ export function Form<S extends z.ZodType<any, any>>({
           <form onSubmit={handleSubmit}>
             {children}
 
-            {submitError && (
-              <Box role="alert" style={{ color: 'red' }}>
-                {submitError}
-              </Box>
-            )}
+            {submitError && <FormErrorMessage>{submitError}</FormErrorMessage>}
 
             {submitText && (
               <HStack>
                 <Button
                   type="submit"
                   disabled={submitting || hasValidationErrors}
-                  colorScheme="purple"
+                  colorScheme="yellow"
                   w={fullWidthSubmit ? 'full' : 'auto'}
                   isLoading={submitting}
                 >

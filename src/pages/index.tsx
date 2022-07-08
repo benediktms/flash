@@ -1,40 +1,27 @@
 import { trpc } from '@/lib/trpc';
-import {
-  Box,
-  Text,
-  Button,
-  Center,
-  Heading,
-  FormControl,
-  Input,
-  FormHelperText,
-  useToast,
-} from '@chakra-ui/react';
+import { Box, Text, Button, Center, Heading } from '@chakra-ui/react';
 import type { NextPage } from 'next';
 import { useState } from 'react';
+import { Form } from '../components/Form';
+import LabeledTextField from '../components/LabeledTextField';
+import { createFlashCardSchema } from '../validators/createFlashCard';
 
 const Home: NextPage = () => {
   const [showFlashCardForm, setShowFlashCardForm] = useState(false);
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
 
-  const toast = useToast();
-
-  const createFlashCardMutation = trpc.useMutation(['create-flashcard']);
-  const handleCreateFlashCardMutation = (question: string, answer: string) => {
-    createFlashCardMutation.mutate({
-      question,
-      answer,
-    });
-
-    if (createFlashCardMutation.error) {
-      const error = JSON.parse(createFlashCardMutation.error.message);
-      toast({
-        title: 'Something went wrong',
-        description: error[0].message,
-        status: 'error',
-        isClosable: true,
-      });
+  const createFlashCardMutation = trpc.useMutation(['flashCard.create'], {
+    async onSuccess() {
+      await trpc.useContext().invalidateQueries(['flashCard.all']);
+    },
+  });
+  const handleCreateFlashCardMutation = async (input: {
+    question: string;
+    answer: string;
+  }) => {
+    try {
+      await createFlashCardMutation.mutateAsync(input);
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -61,40 +48,15 @@ const Home: NextPage = () => {
           </Button>
         </Box>
         {showFlashCardForm && (
-          <FormControl>
-            <Input
-              type="text"
-              id="question"
-              variant="filled"
-              placeholder="Question"
-              value={question}
-              onChange={e => {
-                console.log(e.target.value);
-                return setQuestion(e.target.value);
-              }}
-            />
-            <FormHelperText>
-              Enter the question you want to revise for this flash card
-            </FormHelperText>
-            <Box mb={5} />
-            <Input
-              type="text"
-              id="answer"
-              variant="filled"
-              placeholder="Answer"
-              value={answer}
-              onChange={e => setAnswer(e.target.value)}
-            />
-            <FormHelperText>Enter the answer</FormHelperText>
-            <Box mb={5} />
-            <Button
-              colorScheme="yellow"
-              onClick={() => handleCreateFlashCardMutation(question, answer)}
-              disabled={createFlashCardMutation.isLoading}
-            >
-              Submit
-            </Button>
-          </FormControl>
+          <Form
+            schema={createFlashCardSchema}
+            initialValues={{ answer: '', question: '' }}
+            submitText="Create"
+            onSubmit={handleCreateFlashCardMutation}
+          >
+            <LabeledTextField name="question" label="Question" />
+            <LabeledTextField name="answer" label="Answer" />
+          </Form>
         )}
       </Box>
     </Center>

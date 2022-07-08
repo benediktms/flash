@@ -16,14 +16,16 @@ model FlashCard {
   updatedAt DateTime @updatedAt
   question  String
   answer    String
-  Set       Set?     @relation(fields: [setId], references: [id])
-  setId     Int?
+
+  Set   Set? @relation(fields: [setId], references: [id])
+  setId Int?
 }
 
 model Set {
-  id        Int         @id @default(autoincrement())
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   name      String
-  flashCard FlashCard[]
+
+  FlashCards FlashCard[]
 }
