@@ -2,6 +2,7 @@ import { trpc } from '@/lib/trpc';
 import { Box, Text, Button, Center, Heading } from '@chakra-ui/react';
 import type { NextPage } from 'next';
 import { useState } from 'react';
+import { z } from 'zod';
 import { Form } from '../components/Form';
 import LabeledTextField from '../components/LabeledTextField';
 import { createFlashCardSchema } from '../validators/createFlashCard';
@@ -14,10 +15,10 @@ const Home: NextPage = () => {
       await trpc.useContext().invalidateQueries(['flashCard.all']);
     },
   });
-  const handleCreateFlashCardMutation = async (input: {
-    question: string;
-    answer: string;
-  }) => {
+
+  const handleCreateFlashCardMutation = async (
+    input: z.infer<typeof createFlashCardSchema>
+  ) => {
     try {
       await createFlashCardMutation.mutateAsync(input);
     } catch (e) {
