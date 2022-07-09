@@ -13,7 +13,7 @@ export const userRouter = createRouter().mutation('signUp', {
 
     if (existing) {
       // Error should not give any information on whether the email is in use for security reasons
-      throw new Error('Please try again.');
+      throw new Error('Sign up failed');
     }
 
     const salt = randomBytes(SALT_ROUNDS);
