@@ -1,6 +1,7 @@
 import { Box, Button, Center, useToast } from '@chakra-ui/react';
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import { unstable_getServerSession as getServerSession } from 'next-auth';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { z } from 'zod';
 import { Form } from '../components/Form';
@@ -16,7 +17,11 @@ const SignUp: NextPage = () => {
   const signUpMutation = trpc.useMutation(['user.signUp']);
   const handleSignUp = async (input: z.infer<typeof signUpSchema>) => {
     try {
-      await signUpMutation.mutateAsync(input);
+      const res = await signUpMutation.mutateAsync(input);
+      await signIn('credentials', {
+        email: res.email,
+        password: input.password,
+      });
     } catch (e) {
       const err = normalizeError(e);
       toast({
