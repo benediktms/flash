@@ -54,6 +54,7 @@ export function Form<S extends z.ZodType<any, any>>({
             {submitText && (
               <HStack>
                 <Button
+                  mt={2}
                   type="submit"
                   disabled={submitting || hasValidationErrors}
                   colorScheme="yellow"

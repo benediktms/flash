@@ -6,11 +6,15 @@ import { loggerLink } from '@trpc/client/links/loggerLink';
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
 import { SSRContext } from '@/lib/trpc';
 import superjson from 'superjson';
+import { NodeEnvironment } from '../lib/environment';
+import { SessionProvider } from 'next-auth/react';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <ChakraProvider>
-      <Component {...pageProps} />
+      <SessionProvider session={session}>
+        <Component {...pageProps} />
+      </SessionProvider>
     </ChakraProvider>
   );
 }
@@ -27,7 +31,7 @@ const getBaseUrl = () => {
 };
 
 export default withTRPC<AppRouter>({
-  config() {
+  config({ ctx }) {
     /**
      * If you want to use SSR, you need to use the server's full URL
      * @link https://trpc.io/docs/ssr
@@ -48,7 +52,7 @@ export default withTRPC<AppRouter>({
         // adds pretty logs to your console in development and logs errors in production
         loggerLink({
           enabled: opts =>
-            process.env.NODE_ENV === 'development' ||
+            process.env.NODE_ENV === NodeEnvironment.Development ||
             (opts.direction === 'down' && opts.result instanceof Error),
         }),
         httpBatchLink({
@@ -63,7 +67,8 @@ export default withTRPC<AppRouter>({
   ssr: true,
   /**
    * Set headers or status code when doing SSR
-   */ responseMeta(opts) {
+   */
+  responseMeta(opts) {
     const ctx = opts.ctx as SSRContext;
 
     if (ctx.status) {
