@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "yarn generate && yarn migrate:deploy && next build",
     "start": "next start",
     "lint": "next lint",
     "generate": "yarn prisma generate",
-    "migrate": "yarn prisma migrate dev"
+    "migrate:dev": "yarn prisma migrate dev",
+    "migrate:deploy": "yarn prisma migrate deploy"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.2.1",
