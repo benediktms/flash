@@ -1,5 +1,6 @@
 import { Box, Button, Center, useToast } from '@chakra-ui/react';
-import { NextPage } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
+import { unstable_getServerSession as getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { z } from 'zod';
 import { Form } from '../components/Form';
@@ -7,6 +8,7 @@ import LabeledTextField from '../components/LabeledTextField';
 import { normalizeError } from '../lib/noramlized-error';
 import { trpc } from '../lib/trpc';
 import { signUpSchema } from '../validators/signUp';
+import { authOptions } from './api/auth/[...nextauth]';
 
 const SignUp: NextPage = () => {
   const toast = useToast();
@@ -44,6 +46,25 @@ const SignUp: NextPage = () => {
       </Box>
     </Center>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
 };
 
 export default SignUp;
