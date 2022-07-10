@@ -19,6 +19,8 @@ const SignUp: NextPage = () => {
     try {
       const res = await signUpMutation.mutateAsync(input);
       await signIn('credentials', {
+        // TODO: redirect to some sort of profile page
+        // redirect: false,
         email: res.email,
         password: input.password,
       });
