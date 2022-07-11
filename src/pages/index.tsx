@@ -15,9 +15,11 @@ const Home: NextPage = () => {
   const toast = useToast();
   const { data: session } = useSession();
 
-  const createFlashCardMutation = trpc.useMutation(['flashCard.create'], {
+  const context = trpc.useContext();
+
+  const createFlashCardMutation = trpc.useMutation(['auth.flashCard.create'], {
     async onSuccess() {
-      await trpc.useContext().invalidateQueries(['flashCard.all']);
+      await context.invalidateQueries(['auth.flashCard.all']);
     },
   });
 

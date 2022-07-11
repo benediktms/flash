@@ -1,5 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { createRouter } from '../context';
+import { flashCardRouter } from './flashCard';
+import { setRouter } from './set';
 
 export const authRouter = createRouter()
   .query('getSession', {
@@ -15,8 +17,5 @@ export const authRouter = createRouter()
     }
     return next();
   })
-  .query('getSecretMessage', {
-    async resolve({ ctx }) {
-      return 'You are logged in and can see this secret message!';
-    },
-  });
+  .merge('flashCard.', flashCardRouter)
+  .merge('set.', setRouter);
