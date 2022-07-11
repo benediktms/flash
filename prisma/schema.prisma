@@ -17,8 +17,8 @@ model FlashCard {
   question  String
   answer    String
 
-  Set   Set? @relation(fields: [setId], references: [id])
-  setId Int?
+  Set   Set @relation(fields: [setId], references: [id])
+  setId Int
 }
 
 model Set {
@@ -28,8 +28,8 @@ model Set {
   name      String
 
   FlashCards FlashCard[]
-  User       User?       @relation(fields: [userId], references: [id])
-  userId     Int?
+  User       User        @relation(fields: [userId], references: [id])
+  userId     Int
 }
 
 model User {
