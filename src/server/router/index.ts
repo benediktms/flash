@@ -2,7 +2,7 @@ import { createRouter } from '../context';
 import superjson from 'superjson';
 import { userRouter } from './user';
 import { authRouter } from './auth';
-import { logger } from '@/lib/logger';
+import { log } from 'next-axiom';
 
 export const appRouter = createRouter()
   .transformer(superjson)
@@ -19,7 +19,7 @@ export const appRouter = createRouter()
       response: { status: res?.statusCode },
     };
 
-    logger.info(data);
+    log.debug('Request', data);
 
     return await next();
   })
